@@ -1,0 +1,23 @@
+{
+  "name": "reactive-places__root",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\" "
+  },
+  "keywords": [
+    "MERN",
+    "stack",
+    "MongoDB",
+    "Mongoose",
+    "ReactJS",
+    "ExpressJS",
+    "NodeJS"
+  ],
+  "author": "Dzenis H.",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^5.1.0"
+  }
+}
