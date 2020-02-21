@@ -1,3 +1,7 @@
 node_modules
 config/config_prod.js
-upload/images/*
+# exclude everything
+uploads/images/*
+
+# exception to the rule
+!uploads/images/.gitkeep 
