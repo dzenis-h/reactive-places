@@ -17,6 +17,11 @@
   background: white;
 }
 
+.main-heading {
+  color: #f8df00;
+  text-shadow: "1px 2px 1px grey";
+}
+
 .main-navigation__title {
   color: white;
 }
