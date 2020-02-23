@@ -1,7 +1,5 @@
 const fs = require("fs");
-
 const { validationResult } = require("express-validator");
-const mongoose = require("mongoose");
 
 const HttpError = require("../middleware/http-error");
 const getCoordsForAddress = require("../util/location");
@@ -29,14 +27,12 @@ const getPlaceById = async (req, res, next) => {
     );
     return next(error);
   }
-
   res.json({ place: place.toObject({ getters: true }) });
 };
 
 const getPlacesByUserId = async (req, res, next) => {
   const userId = req.params.uid;
 
-  // let places;
   let userWithPlaces;
   try {
     userWithPlaces = await User.findById(userId).populate("places");
@@ -108,7 +104,6 @@ const createPlace = async (req, res, next) => {
     user.places.push(createdPlace);
     await user.save();
   } catch (err) {
-    console.log(err);
     const error = new HttpError(
       "Creating place failed, please try again !!!",
       500
@@ -165,7 +160,7 @@ const deletePlace = async (req, res, next) => {
     place = await Place.findById(placeId).populate("creator");
   } catch (err) {
     const error = new HttpError(
-      "Something went wrong, could not delete place.",
+      "Something went wrong, could not delete place 1",
       500
     );
     return next(error);
@@ -179,15 +174,16 @@ const deletePlace = async (req, res, next) => {
   const imagePath = place.image;
 
   try {
-    const sess = await mongoose.startSession();
-    sess.startTransaction();
-    await place.remove({ session: sess });
-    place.creator.places.pull(place);
-    await place.creator.save({ session: sess });
-    await sess.commitTransaction();
+    const user = await User.findById(place.creator.id);
+    const newList = user.places.filter(
+      p => p.toString() !== placeId.toString()
+    );
+    user.places = newList;
+    await user.save();
+    await place.remove();
   } catch (err) {
     const error = new HttpError(
-      "Something went wrong, could not delete place.",
+      "Something went wrong, could not delete place 2",
       500
     );
     return next(error);
@@ -197,7 +193,7 @@ const deletePlace = async (req, res, next) => {
     console.log(err);
   });
 
-  res.status(200).json({ message: "Deleted place." });
+  res.status(200).json({ message: "Place successfully deleted." });
 };
 
 exports.getPlaceById = getPlaceById;
