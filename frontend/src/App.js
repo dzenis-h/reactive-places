@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -13,31 +13,10 @@ import UpdatePlace from "./places/pages/UpdatePlace";
 import Auth from "./user/pages/Auth";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import { AuthContext } from "./shared/context/auth-context";
+import { useAuth } from "./shared/hooks/auth-hook";
 
 const App = () => {
-  const [token, setToken] = useState(false);
-  const [userId, setUserId] = useState(false);
-
-  const login = useCallback((uid, token) => {
-    setToken(token);
-    setUserId(uid);
-    // const authData = [token, uid];
-    localStorage.setItem("reactivePlaces", JSON.stringify({ token, uid }));
-  }, []);
-
-  const logout = useCallback(() => {
-    setToken(null);
-    setUserId(null);
-    localStorage.removeItem("reactivePlaces");
-  }, []);
-
-  useEffect(() => {
-    const lsData = JSON.parse(localStorage.getItem("reactivePlaces"));
-    if (lsData) {
-      setToken(lsData.token);
-      setUserId(lsData.uid);
-    }
-  }, []);
+  const [token, login, logout, userId] = useAuth();
 
   let routes;
 

@@ -6,6 +6,7 @@ import NavLinks from "./NavLinks";
 import SideDrawer from "./SideDrawer";
 import Backdrop from "../UIElements/Backdrop";
 import "./MainNavigation.css";
+import PlaceLogo from "../../place.png";
 
 const MainNavigation = props => {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
@@ -37,6 +38,7 @@ const MainNavigation = props => {
           <span />
         </button>
         <h1 className="main-navigation__title">
+          <img src={PlaceLogo} alt="Reactive Places" className="logo" />
           <Link to="/">Reactive Places</Link>
         </h1>
         <nav className="main-navigation__header-nav">
