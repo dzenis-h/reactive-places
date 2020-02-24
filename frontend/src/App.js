@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -21,11 +21,22 @@ const App = () => {
   const login = useCallback((uid, token) => {
     setToken(token);
     setUserId(uid);
+    // const authData = [token, uid];
+    localStorage.setItem("reactivePlaces", JSON.stringify({ token, uid }));
   }, []);
 
   const logout = useCallback(() => {
     setToken(null);
     setUserId(null);
+    localStorage.removeItem("reactivePlaces");
+  }, []);
+
+  useEffect(() => {
+    const lsData = JSON.parse(localStorage.getItem("reactivePlaces"));
+    if (lsData) {
+      setToken(lsData.token);
+      setUserId(lsData.uid);
+    }
   }, []);
 
   let routes;

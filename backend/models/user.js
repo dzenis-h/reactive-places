@@ -17,8 +17,12 @@ const userSchema = new Schema({
 userSchema.plugin(uniqueValidator);
 
 userSchema.pre("save", async function(next) {
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 userSchema.methods.isMatch = async function(enteredPassword) {

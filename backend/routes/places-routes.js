@@ -36,6 +36,9 @@ router.patch(
       .not()
       .isEmpty(),
     check("description").isLength({ min: 5 })
+    // check("userId")
+    //   .not()
+    //   .isEmpty()
   ],
   placesControllers.updatePlace
 );

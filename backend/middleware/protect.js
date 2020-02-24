@@ -7,7 +7,7 @@ exports.protect = async (req, res, next) => {
   let token;
 
   if (req.method === "OPTIONS") {
-    next();
+    return next();
   }
 
   if (

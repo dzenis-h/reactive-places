@@ -23,7 +23,9 @@
 
 .main-navigation__title a {
   text-decoration: none;
-  color: white;
+  font-family: "Monoton";
+  color: darkcyan;
+  letter-spacing: 0.2em;
 }
 
 .main-navigation__header-nav {

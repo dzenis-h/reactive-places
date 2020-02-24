@@ -44,7 +44,7 @@ const getPlacesByUserId = async (req, res, next) => {
     return next(error);
   }
 
-  if (!userWithPlaces || userWithPlaces.places.length === 0) {
+  if (!userWithPlaces) {
     return next(
       new HttpError("Could not find places for the provided user id.", 404)
     );
@@ -123,17 +123,31 @@ const updatePlace = async (req, res, next) => {
   }
 
   const { title, description } = req.body;
-  const placeId = req.params.pid;
+  const { pid } = req.params;
 
   let place;
   try {
-    place = await Place.findById(placeId);
+    place = await Place.findById(pid).populate("creator");
   } catch (err) {
     const error = new HttpError(
       "Something went wrong, could not update place.",
       500
     );
     return next(error);
+  }
+
+  if (!place) {
+    const error = new HttpError(`No place found with the id of ${pid}`, 500);
+    return next(error);
+  }
+
+  if (place.creator.id.toString() !== req.user.id.toString()) {
+    return next(
+      new HttpError(
+        `User with the id of ${req.user.id} is NOT authorized to do this action`,
+        401
+      )
+    );
   }
 
   place.title = title;
@@ -153,11 +167,12 @@ const updatePlace = async (req, res, next) => {
 };
 
 const deletePlace = async (req, res, next) => {
-  const placeId = req.params.pid;
+  const { pid } = req.params;
+  const { id } = req.user; // we're setting this up in the'protect' middleware (from token)
 
   let place;
   try {
-    place = await Place.findById(placeId).populate("creator");
+    place = await Place.findById(pid).populate("creator");
   } catch (err) {
     const error = new HttpError(
       "Something went wrong, could not delete place 1",
@@ -171,13 +186,20 @@ const deletePlace = async (req, res, next) => {
     return next(error);
   }
 
+  if (place.creator.id.toString() !== req.user.id.toString()) {
+    return next(
+      new HttpError(
+        `User with the id of ${id} is NOT authorized to do this action`,
+        401
+      )
+    );
+  }
+
   const imagePath = place.image;
 
   try {
     const user = await User.findById(place.creator.id);
-    const newList = user.places.filter(
-      p => p.toString() !== placeId.toString()
-    );
+    const newList = user.places.filter(p => p.toString() !== pid.toString());
     user.places = newList;
     await user.save();
     await place.remove();

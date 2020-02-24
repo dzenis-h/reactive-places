@@ -59,7 +59,7 @@ const UpdatePlace = () => {
       } catch (err) {}
     };
     fetchPlace();
-  }, [sendRequest, placeId, setFormData, auth.token]);
+  }, [sendRequest, placeId, setFormData]);
 
   const placeUpdateSubmitHandler = async event => {
     event.preventDefault();
@@ -70,6 +70,7 @@ const UpdatePlace = () => {
         JSON.stringify({
           title: formState.inputs.title.value,
           description: formState.inputs.description.value
+          // userId: auth.userId
         }),
         {
           "Content-Type": "application/json",
