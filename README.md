@@ -54,8 +54,8 @@ Contributions are always welcome! If you would like to contribute to this projec
 2. Create a new branch. 🌵
 3. Make your changes and test them thoroughly. 👨‍💻
 4. Submit a pull request. ✔
-
-8. ## Credits 👨🏻‍💻
+ 
+ ## Credits 👨🏻‍💻
 
 This repo was created by [Dzenis H.](https://dzenis.tech)
 
